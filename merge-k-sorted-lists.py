@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from lists import ListNode, of, printlist
 
@@ -14,6 +14,31 @@ class Solution:
             n = n.next
 
         return rst
+
+    def mergeKLists1(self, lists: List[ListNode]) -> ListNode:
+        n = self.popminimum(lists)
+        rst = n
+        while n is not None:
+            n.next = self.popminimum(lists)
+            n = n.next
+
+        return rst
+
+    def popminimum(self, lists: List[ListNode]) -> Optional[ListNode]:
+        if len(lists) == 0:
+            return None
+
+        n = -1
+        for i in range(0, len(lists)):
+            if lists[i] is not None:
+                if n == -1 or lists[n].val > lists[i].val:
+                    n = i
+        if n != -1:
+            rst = lists[n]
+            lists[n] = lists[n].next
+            return rst
+        else:
+            return None
 
 
 class Heap:
@@ -59,8 +84,9 @@ if __name__ == "__main__":
     l1 = of(1, 4, 5)
     l2 = of(1, 3, 4)
     l3 = of(2, 6)
+    l4 = of()
 
     s = Solution()
-    r = s.mergeKLists([l1, l2, l3])
+    r = s.mergeKLists1([l1, l2, l3, l4])
     printlist(r)
 
